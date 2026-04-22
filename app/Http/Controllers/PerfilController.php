@@ -21,6 +21,7 @@ class PerfilController extends Controller
             'peso_inicial'=>'required|numeric|min:30|max:300',
             'fecha_nacimiento'=>'required|date',
             'objetivo'=>'required|in:Ganar masa muscular,Perder grasa,Recomposición corporal,Mantenimiento',
+            'sexo'=>'required|in:Masculino,Femenino, Prefiero no decirlo',
         ]);
 
         Perfil::create([
@@ -29,6 +30,7 @@ class PerfilController extends Controller
             'peso_inicial'=> $request->peso_inicial,
             'fecha_nacimiento'=>$request->fecha_nacimiento,
             'objetivo'=>$request->objetivo, 
+            'sexo'=>$request->sexo,
         ]);
 
         return redirect('/dashboard');

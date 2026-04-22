@@ -16,7 +16,11 @@ class DashboardController extends Controller
        ->orderBy('created_at', 'desc')
        ->take(3)
        ->get();
-       return view('dashboard',compact('usuario','ultimasRutinas'));
+
+       $rutinas = \App\Models\Rutina::where('usuario_id', auth()->id())->get();
+
+       
+       return view('dashboard',compact('usuario','ultimasRutinas', 'rutinas'));
     }
 
     public function logout(Request $request){

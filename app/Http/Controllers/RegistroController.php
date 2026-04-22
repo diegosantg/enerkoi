@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuario;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Testing\Fluent\Concerns\Has;
@@ -30,8 +31,10 @@ class RegistroController extends Controller
             'email'=>$request->email,
             'password'=> Hash::make($request->password),
         ]);
-        Auth::login($usuario);
-        return  redirect('/completar-perfil');
+        event(new Registered($usuario));
+
+        \Auth::login($usuario);
+        return  redirect('/verificacion-aviso');
     }
 
 }

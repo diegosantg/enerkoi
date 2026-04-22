@@ -13,6 +13,7 @@ class Perfil extends Model
     protected $fillable = [
         'usuario_id',
         'estatura',
+        'sexo',
         'peso_inicial',
         'fecha_nacimiento',
         'objetivo',

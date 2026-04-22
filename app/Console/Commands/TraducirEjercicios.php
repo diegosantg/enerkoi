@@ -8,18 +8,16 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class TraducirEjercicios extends Command
 {
-    // El nombre del comando que escribiremos en la terminal
+    // nombre del comando lol
     protected $signature = 'enerkoi:traducir';
-
-    // La descripción de lo que hace
     protected $description = 'Traduce los nombres de los ejercicios de inglés a español';
 
     public function handle()
     {
-        // 1. Configuramos el traductor: De Inglés ('en') a Español ('es')
+        // Configuramos el traductor: De Inglés ('en') a Español ('es')
         $traductor = new GoogleTranslate('es', 'en');
 
-        // 2. Buscamos TODOS los ejercicios que aún no tienen traducción
+        //Buscamos los ejercicios que aún no tienen traducción
         $ejercicios = Ejercicio::whereNull('nombre_espanol')->get();
 
         $total = $ejercicios->count();
@@ -31,7 +29,7 @@ class TraducirEjercicios extends Command
 
         $this->info("Iniciando traducción de $total ejercicios. Esto tomará un par de minutos...");
 
-        // 3. Empezamos una barra de progreso visual en la terminal
+        //Empezamos una barra de progreso visual en la terminal
         $bar = $this->output->createProgressBar($total);
         $bar->start();
 
@@ -43,7 +41,7 @@ class TraducirEjercicios extends Command
                 // Lo guardamos en la base de datos
                 $ejercicio->update(['nombre_espanol' => $traduccion]);
                 
-                // Pausamos medio segundo (500,000 microsegundos) para que Google no nos bloquee por hacer peticiones muy rápido
+                //para que Google no nos bloquee por hacer peticiones muy rápido
                 usleep(500000); 
 
             } catch (\Exception $e) {

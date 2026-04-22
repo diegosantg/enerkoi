@@ -7,6 +7,9 @@ use App\Models\Rutina;
 use App\Models\RutinaEjercicio;
 use App\Models\GrupoMuscular;
 use App\Models\Ejercicio;
+use Illuminate\Support\Facades\DB;
+
+use function Symfony\Component\Clock\now;
 
 class RutinaController extends Controller
 {
@@ -119,4 +122,42 @@ class RutinaController extends Controller
         $rutina->restore();
         return redirect('/rutinas')->with('mensaje','Rutina restaurada con exito');
     }
+
+    public function iniciar($id){
+        $rutina = Rutina::with('ejercicios.detalleEjercicio')
+        ->where('usuario_id', \Auth::id())
+        ->findOrFail($id);
+
+        if ($rutina->ejercicios->isEmpty()){
+            return redirect('/rutinas/'.$id)->with('error', 'Agrega ejercicios para poder iniciar esta rutina');
+        }
+        return view('rutinas.iniciar', compact('rutina'));
+    }
+
+    public function guardarEntrenamiento(Request $request, $id)
+    {
+        $sesionId = DB::table('sesiones')->insertGetId([
+            'usuario_id' => auth()->user()->id_usuario, 
+            'rutina_id' => $id,
+            'duracion_segundos' => $request->tiempo_total,
+            'created_at' => now()
+        ]);
+
+     
+        foreach ($request->historial as $ejercicio) {
+            foreach ($ejercicio['series'] as $serie) {
+                DB::table('sesiones_series')->insert([
+                    'sesion_id' => $sesionId,
+                    'ejercicio_id' => $ejercicio['id_ejercicio'],
+                    'reps_objetivo' => $serie['reps_objetivo'],
+                    'estado' => $serie['estado'] ?? 'omitida', 
+                    'created_at' => now()
+                ]);
+            }
+        }
+
+        return response()->json(['mensaje' => '¡Entrenamiento guardado con éxito!']);
+    }
+    
+
 }
