@@ -7,208 +7,175 @@
     <link rel="icon" href="{{ asset('img/LOGOENERKOI.png') }}" type="image/png">
     
     <style>
-        /* 1. SISTEMA DE DISEÑO ENERKOI */
+        /* 1. SISTEMA DE DISEÑO ENERKOI (Mobile-First) */
         :root {
-            --bg-oscuro : #3b4282;
-            --bg-claro: #f4f4f4;
+            --bg-app: #f4f6f9; 
+            --blanco: #ffffff;
             --azul-boton: #1877f2;
-            --texto-oscuro: #333;
-            --texto-claro: #fff;
-            
-            /* Colores semánticos para acciones */
-            --alerta-editar: #ffc107;
-            --peligro-borrar: #dc3545;
+            --alerta-editar: #f59e0b; /* Naranja/Ámbar moderno */
+            --peligro-borrar: #ef4444; /* Rojo suave nativo */
+            --texto-oscuro: #1f2937;
+            --texto-gris: #6b7280;
         }
 
-        /* 2. REGLAS GLOBALES */
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--bg-oscuro);
-            color: var(--texto-claro);
-            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background-color: var(--bg-app); color: var(--texto-oscuro);
+            -webkit-font-smoothing: antialiased; 
         }
 
-        .main-container {
-            max-width: 800px;
-            margin: 0 auto;
+        .app-container {
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            padding-bottom: 80px;
         }
 
-        .btn-volver {
-            display: inline-block;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-size: 15px;
-            transition: color 0.3s;
+        /* 2. HEADER DE NAVEGACIÓN */
+        .top-nav { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        
+        .btn-back { 
+            background: var(--blanco); border: none; width: 45px; height: 45px; 
+            border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--texto-oscuro);
+            transition: transform 0.1s;
+        }
+        .btn-back:active { transform: scale(0.95); }
+        
+        .top-nav h1 { margin: 0; font-size: 20px; font-weight: 800; color: var(--texto-oscuro); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+
+        /* 3. TARJETA DE CABECERA (Info y Acciones) */
+        .header-card {
+            background: var(--blanco); border-radius: 24px; padding: 25px 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.03); margin-bottom: 20px;
+            text-align: center;
         }
 
-        .btn-volver:hover {
-            color: var(--texto-claro);
-            text-decoration: underline;
-        }
+        .header-card h2 { margin: 0 0 10px 0; font-size: 26px; font-weight: 800; color: var(--texto-oscuro); }
+        .header-card p { margin: 0 0 25px 0; color: var(--texto-gris); font-size: 15px; line-height: 1.5; }
 
-        /* 3. ENCABEZADO Y BOTONES DE ACCIÓN */
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap; /* En celulares, los botones se bajan si no caben */
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .rutina-titulo {
-            font-size: 32px;
-            margin: 0;
-            color: var(--texto-claro);
-        }
-
-        .acciones-grupo {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        /* Grid de botones 50/50 */
+        .acciones-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
         }
 
         .btn-accion {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            text-decoration: none;
-            transition: opacity 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; border: none; border-radius: 16px; padding: 14px;
+            font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        .btn-accion:active { transform: scale(0.97); }
+        
+        .btn-editar { background-color: rgba(245, 158, 11, 0.1); color: var(--alerta-editar); }
+        .btn-borrar { background-color: rgba(239, 68, 68, 0.1); color: var(--peligro-borrar); }
+
+        /* 4. TARJETA DE EJERCICIOS */
+        .card-app {
+            background: var(--blanco); border-radius: 24px; padding: 25px 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.03); margin-bottom: 20px;
+        }
+        
+        .card-app h3 {
+            margin: 0 0 20px 0; font-size: 18px; font-weight: 800;
+            color: var(--texto-oscuro); display: flex; align-items: center; justify-content: space-between;
         }
 
-        .btn-accion:hover {
-            opacity: 0.85;
+        .badge-count {
+            background: var(--bg-app); color: var(--texto-gris); padding: 4px 10px;
+            border-radius: 12px; font-size: 13px; font-weight: 700;
         }
 
-        .btn-editar {
-            background-color: var(--alerta-editar);
-            color: #333;
+        .lista-ejercicios { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px; }
+
+        .ejercicio-item {
+            background: var(--bg-app); border-radius: 16px; padding: 18px;
         }
 
-        .btn-borrar {
-            background-color: var(--peligro-borrar);
-            color: white;
-        }
+        .ejercicio-item h4 { margin: 0 0 12px 0; color: var(--texto-oscuro); font-size: 16px; font-weight: 700; }
 
-        .rutina-desc {
-            color: #ddd;
-            font-size: 16px;
-            margin-top: 5px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        /* 4. PANEL DE EJERCICIOS (Contraste visual) */
-        .panel-ejercicios {
-            background-color: var(--bg-claro);
-            border-radius: 12px;
-            padding: 25px;
-            color: var(--texto-oscuro);
-        }
-
-        .panel-titulo {
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: var(--bg-oscuro);
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        .lista-ejercicios {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .ejercicio-card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .ejercicio-nombre {
-            margin: 0 0 12px 0;
-            color: var(--bg-oscuro);
-            font-size: 18px;
-        }
-
-        /* Las píldoras de las estadísticas */
-        .ejercicio-stats {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap; /* Si hay muchos datos, bajan a la siguiente línea */
-        }
+        .ejercicio-stats { display: flex; gap: 8px; flex-wrap: wrap; }
 
         .stat-badge {
-            background-color: #f0f0f0;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #555;
-            border: 1px solid #ddd;
+            background: var(--blanco); padding: 8px 12px; border-radius: 10px;
+            font-size: 13px; color: var(--texto-gris); font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 5px;
         }
+        .stat-badge strong { color: var(--texto-oscuro); }
 
-        .stat-badge strong {
-            color: #333;
-        }
+        /* ESTADO VACÍO */
+        .estado-vacio { text-align: center; color: var(--texto-gris); padding: 20px; font-size: 14px; }
+
+        /* 5. SVGs */
+        .svg-icon { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .svg-small { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
-    <div class="main-container">
+    <div class="app-container">
         
-        <a href="/rutinas" class="btn-volver">← Volver a mis rutinas</a>
-        
-        <div class="header-top">
-            <h1 class="rutina-titulo">{{$rutina->nombre}}</h1>
+        <nav class="top-nav">
+            <a href="/rutinas" class="btn-back">
+                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </a>
+            <h1>Detalle de Rutina</h1>
+        </nav>
 
-            <div class="acciones-grupo">
+        <div class="header-card">
+            <h2>{{$rutina->nombre}}</h2>
+            @if($rutina->descripcion)
+                <p>{{ $rutina->descripcion }}</p>
+            @else
+                <p style="font-style: italic;">Sin descripción agregada.</p>
+            @endif
+
+            <div class="acciones-grid">
                 <a href="/rutinas/{{ $rutina->id_rutinas }}/edit" class="btn-accion btn-editar">
-                    ✏️ Editar
+                    <svg class="svg-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Editar
                 </a>
                 
                 <form action="/rutinas/{{ $rutina->id_rutinas}}" method="POST" onsubmit="return confirm('¿Seguro que quieres enviar esta rutina a la papelera? Tienes 30 días para recuperarla.');" style="margin: 0;">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn-accion btn-borrar">
-                        🗑️ Papelera
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                        Papelera
                     </button>  
                 </form>
             </div>
         </div>
 
-        @if($rutina->descripcion)
-            <p class="rutina-desc">{{ $rutina->descripcion }}</p>
-        @endif
-
-        <div class="panel-ejercicios">
-            <h3 class="panel-titulo">Ejercicios en esta rutina ({{ $rutina->ejercicios->count()}})</h3>
+        <div class="card-app">
+            <h3>
+                Ejercicios
+                <span class="badge-count">{{ $rutina->ejercicios->count()}} en total</span>
+            </h3>
 
             @if ($rutina->ejercicios->isEmpty())
-                <p style="color: #666; font-style: italic;">Esta rutina está vacía. Presiona "Editar" para agregarle ejercicios.</p>
+                <div class="estado-vacio">
+                    <svg style="width: 48px; height: 48px; stroke: #ccc; fill:none; stroke-width:1.5; margin-bottom: 15px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <p>Esta rutina está vacía. Presiona "Editar" para agregarle bloques de entrenamiento.</p>
+                </div>
             @else
                 <ul class="lista-ejercicios">
                     @foreach($rutina->ejercicios as $indice => $item)
-                    <li class="ejercicio-card">
-                        <h4 class="ejercicio-nombre">
-                            {{$indice + 1}}. {{$item->detalleEjercicio->nombre_espanol ?? $item->detalleEjercicio->nombre}}
-                        </h4>
+                    <li class="ejercicio-item">
+                        <h4>{{$indice + 1}}. {{$item->detalleEjercicio->nombre_espanol ?? $item->detalleEjercicio->nombre}}</h4>
                         
                         <div class="ejercicio-stats">
-                            <span class="stat-badge"><strong>Series:</strong> {{$item->target_sets}}</span>
-                            <span class="stat-badge"><strong>Reps:</strong> {{$item->target_reps}}</span>
-                            <span class="stat-badge"><strong>Descanso:</strong> {{$item->rest_seconds}}s</span>
+                            <div class="stat-badge">
+                                <svg class="svg-small" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="2" ry="2"/><line x1="12" y1="7" x2="12" y2="17"/></svg>
+                                <strong>Series:</strong> {{$item->target_sets}}
+                            </div>
+                            <div class="stat-badge">
+                                <svg class="svg-small" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                <strong>Reps:</strong> {{$item->target_reps}}
+                            </div>
+                            <div class="stat-badge">
+                                <svg class="svg-small" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <strong>Desc:</strong> {{$item->rest_seconds}}s
+                            </div>
                         </div>
                     </li>
                     @endforeach

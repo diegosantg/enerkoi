@@ -3,205 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Papelera de Rutinas - Enerkoi</title>
+    <title>Papelera - Enerkoi</title>
     <link rel="icon" href="{{ asset('img/LOGOENERKOI.png') }}" type="image/png">
     
     <style>
-        /* SISTEMA DE DISEÑO ENERKOI */
+        /* 1. SISTEMA DE DISEÑO ENERKOI (Mobile-First) */
         :root {
-            --bg-oscuro : #3b4282;
-            --bg-claro: #f4f4f4;
-            --azul-boton: #1877f2;
+            --bg-app: #f4f6f9; 
+            --blanco: #ffffff;
             --verde-exito: #28a745;
-            --texto-oscuro: #333;
-            --texto-claro: #fff;
-            --alerta-rojo: #dc3545;
+            --texto-oscuro: #1f2937;
+            --texto-gris: #6b7280;
+            --rojo-papelera: #ef4444;
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--bg-oscuro);
-            color: var(--texto-claro);
-            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background-color: var(--bg-app); color: var(--texto-oscuro);
+            -webkit-font-smoothing: antialiased;
         }
 
-        .main-container {
-            max-width: 1000px;
-            margin: 0 auto;
+        /* 2. CONTENEDOR MÓVIL */
+        .app-container { 
+            max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; 
         }
 
-        .btn-volver {
-            display: inline-block;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-size: 15px;
-            transition: color 0.3s;
+        /* 3. HEADER DE NAVEGACIÓN */
+        .top-nav { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .btn-back { 
+            background: var(--blanco); border: none; width: 45px; height: 45px; 
+            border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--texto-oscuro);
+            transition: transform 0.1s;
+        }
+        .btn-back:active { transform: scale(0.95); }
+        .top-nav h1 { margin: 0; font-size: 24px; font-weight: 800; }
+
+        /* 4. TARJETA DE AVISO (Info Box) */
+        .aviso-card {
+            background: rgba(107, 114, 128, 0.1); border-radius: 16px; padding: 16px;
+            color: var(--texto-gris); font-size: 14px; margin-bottom: 25px; line-height: 1.4;
+            display: flex; gap: 12px; align-items: flex-start;
         }
 
-        .btn-volver:hover {
-            color: var(--texto-claro);
-            text-decoration: underline;
-        }
-
-        .header-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .header-section h1 {
-            margin: 0 0 10px 0;
-            font-size: 32px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-section p {
-            color: #ccc;
-            margin: 0;
-            font-size: 16px;
-        }
-
-        /* GRID DE RUTINAS ELIMINADAS */
+        /* 5. LISTA DE RUTINAS EN PAPELERA */
         .grid-rutinas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            display: flex; flex-direction: column; gap: 15px;
         }
 
-        /* ESTILO "APAGADO" PARA TARJETAS EN PAPELERA */
         .rutina-card {
-            background-color: rgba(255, 255, 255, 0.9); /* Ligeramente transparente */
-            border-radius: 12px;
-            padding: 20px;
-            color: var(--texto-oscuro);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border-left: 5px solid #888; /* Borde gris indicando que está inactiva */
-            filter: grayscale(40%); /* Efecto visual de "eliminado" */
-            transition: filter 0.3s;
+            background: var(--blanco); border-radius: 24px; padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex; flex-direction: column; gap: 15px;
+            /* Efecto visual de "Desactivado/Borrado" */
+            filter: grayscale(80%) opacity(0.85); 
+            transition: filter 0.2s, transform 0.1s;
         }
-
-        .rutina-card:hover {
-            filter: grayscale(0%); /* Recobra color al pasar el mouse */
-        }
+        .rutina-card:active { transform: scale(0.98); filter: grayscale(0%) opacity(1); }
 
         .rutina-header {
-            margin-bottom: 15px;
+            display: flex; flex-direction: column; gap: 5px;
         }
-
+        
         .rutina-nombre {
-            margin: 0 0 5px 0;
-            font-size: 20px;
-            color: #555;
-            text-decoration: line-through; /* Tachado sutil */
+            margin: 0; font-size: 18px; font-weight: 800; color: var(--texto-oscuro);
+            text-decoration: line-through; text-decoration-color: rgba(31, 41, 55, 0.3);
         }
 
         .rutina-fecha {
-            font-size: 13px;
-            color: var(--alerta-rojo);
-            font-weight: bold;
+            font-size: 13px; color: var(--rojo-papelera); font-weight: 700;
+            display: flex; align-items: center; gap: 5px;
         }
 
-        /* BOTONES */
-        .acciones-container {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
+        .rutina-desc {
+            margin: 0; font-size: 14px; color: var(--texto-gris); line-height: 1.4;
         }
 
+        /* 6. BOTÓN DE RESTAURAR */
         .btn-restaurar {
-            flex: 1;
-            background-color: var(--verde-exito);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+            width: 100%; background: var(--verde-exito); color: var(--blanco);
+            border: none; padding: 16px; border-radius: 16px; font-weight: 800; font-size: 15px;
+            display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2); transition: transform 0.1s;
         }
+        .btn-restaurar:active { transform: scale(0.97); }
 
-        .btn-restaurar:hover {
-            background-color: #218838;
+        /* 7. ESTADO VACÍO */
+        .sin-resultados { 
+            text-align: center; padding: 50px 20px; color: var(--texto-gris); 
+            background: var(--blanco); border-radius: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-
-        .btn-restaurar:active {
-            transform: scale(0.98);
-        }
-
-        /* ESTADO VACÍO */
-        .sin-resultados {
-            grid-column: 1 / -1; 
-            text-align: center;
-            padding: 60px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 2px dashed rgba(255,255,255,0.2);
-            border-radius: 12px;
-            color: #ccc;
-        }
-
-        .icono-vacio {
-            font-size: 50px;
-            margin-bottom: 15px;
-            display: block;
-            opacity: 0.5;
-        }
+        .sin-resultados h2 { margin: 0 0 5px 0; font-size: 20px; font-weight: 800; color: var(--texto-oscuro); }
+        .sin-resultados p { margin: 0; font-size: 14px; }
+        
+        /* 8. SVGs GLOBALES */
+        .svg-icon { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .svg-small { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
-    <div class="main-container">
+    <div class="app-container">
         
-        <a href="/rutinas" class="btn-volver">← Volver a mis Rutinas Activas</a>
-        
-        <div class="header-section">
-            <h1>🗑️ Papelera de Reciclaje</h1>
-            <p>Las rutinas aquí almacenadas se eliminarán permanentemente de la base de datos después de 30 días gracias al sistema Prunable.</p>
+        <nav class="top-nav">
+            <a href="/rutinas" class="btn-back">
+                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </a>
+            <h1>Papelera</h1>
+        </nav>
+
+        <div class="aviso-card">
+            <svg class="svg-icon" style="flex-shrink: 0;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div>Las rutinas eliminadas se purgarán permanentemente de la base de datos después de 30 días.</div>
         </div>
 
         <div class="grid-rutinas">
-            
             @forelse($rutinas as $rutina)
                 <div class="rutina-card">
                     <div class="rutina-header">
                         <h3 class="rutina-nombre">{{ $rutina->nombre }}</h3>
                         <span class="rutina-fecha">
+                            <svg class="svg-small" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             Eliminada {{ $rutina->deleted_at->diffForHumans() }}
                         </span>
                     </div>
 
-                    <p style="color: #666; font-size: 14px; margin-top: 0;">
-                        {{ Str::limit($rutina->descripcion, 60, '...') }}
-                    </p>
+                    @if($rutina->descripcion)
+                        <p class="rutina-desc">
+                            {{ Str::limit($rutina->descripcion, 60, '...') }}
+                        </p>
+                    @endif
 
-                    <div class="acciones-container">
-                        <form action="{{ route('rutinas.restaurar', $rutina->id_rutinas) }}" method="POST" style="width: 100%;">
-                            @csrf
-                            <button type="submit" class="btn-restaurar">
-                                ♻️ Restaurar Rutina
-                            </button>
-                        </form>
-                    </div>
+                    <form action="{{ route('rutinas.restaurar', $rutina->id_rutinas) }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" class="btn-restaurar">
+                            <svg class="svg-icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                            Restaurar Rutina
+                        </button>
+                    </form>
                 </div>
             @empty
                 <div class="sin-resultados">
-                    <span class="icono-vacio">✨</span>
-                    <h2>Tu papelera está vacía</h2>
+                    <svg style="width: 48px; height: 48px; stroke: #cbd5e1; fill:none; stroke-width:1.5; margin-bottom: 15px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                    <h2>Papelera vacía</h2>
                     <p>No hay rutinas eliminadas recientemente.</p>
                 </div>
             @endforelse
-
         </div>
 
     </div>

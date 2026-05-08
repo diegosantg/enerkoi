@@ -14,12 +14,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\ProgresoController;
+use App\Http\Controllers\HabitoController;
 
 //RUTAS PUBLICAS
 //metodo get
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::get('/registro',[RegistroController::class,'mostrarFormulario']);
 //metodo POST
 Route::post('/registro',[RegistroController::class,'registrar']);
+
+Route::get('/terminos', function () {
+    return view('terminos');
+});
 //Pantalla de revisa tu bandeja
 Route::get('/verificacion-aviso', function(){
     return view('auth.verify-email');
@@ -32,7 +40,7 @@ Route::get('/email/verify/{id}/{hash}',function(EmailVerificationRequest $reques
 //Boton para reenviar
 Route::post('/email/verification-notification', function(Request $request){
     $request->user()->sendEmailVerificationNotification();
-    return back()-with('mensaje', '¡Enlace enviado!');
+    return back()->with('mensaje', '¡Enlace enviado!');
 })->middleware(['auth','throttle:6,1'])->name('verification.send');
 
 //Rutas ya con el modd o privadas 
@@ -43,6 +51,10 @@ Route::middleware(['auth','verified'])->group(function(){
 
     Route::get('/completar-perfil',[PerfilController::class,'mostrarFormulario']);
     Route::post('/completar-perfil',[PerfilController::class,'guardar']);
+    
+    // Rutas para la Configuración del Perfil
+    Route::get('/configuracion', [PerfilController::class, 'mostrarAjustes']);
+    Route::put('/perfil/actualizar', [PerfilController::class, 'actualizar']);
 
     //Rutas de las rutinas
     Route::get('/rutinas',[RutinaController::class,'index']);
@@ -50,8 +62,10 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('/rutina',[RutinaController::class,'guardar']); 
     Route::post('/rutinas',[RutinaController::class,'guardar']);
     Route::get('/api/ejercicios-del-grupo/{id_grupo}',[RutinaController::class,'obtenerEjerciciosPorGrupo']);
+    Route::get('/api/ejercicio/{id}/video', [\App\Http\Controllers\EjercicioController::class, 'obtenerVideoApi']);
 
     Route::get('/ejercicios', [EjercicioController::class, 'index'])->name('ejercicios.index');
+    Route::get('/ejercicios/{id}', [EjercicioController::class, 'show']);
     Route::get('/rutinas/papelera',[RutinaController::class,'papelera'])->name('rutinas.papelera');
     Route::get('/rutinas/{id}',[RutinaController::class, 'show']);
     Route::delete('/rutinas/{id}',[RutinaController::class,'destroy']);
@@ -61,6 +75,10 @@ Route::middleware(['auth','verified'])->group(function(){
     //Rutas de Sesiones de entrenamiento 
     Route::get('/rutinas/{id}/iniciar', [RutinaController::class, 'iniciar']);
     Route::post('/rutinas/{id}/guardar', [RutinaController::class, 'guardarEntrenamiento']);
+
+    Route::get('/habitos', [HabitoController::class, 'index'])->name('habitos.index');
+     Route::post('/habitos', [HabitoController::class, 'store'])->name('habitos.store'); 
+     Route::post('/habitos/{id}/progreso', [App\Http\Controllers\HabitoController::class, 'registrarProgreso'])->name('habitos.progreso');
 
     //ruta de progreso
     Route::get('/progreso',[ProgresoController::class, 'index'])->name('progreso.index');

@@ -23,6 +23,10 @@ class RegistroController extends Controller
             'apellido_m'=>'required|string|max:255',
             'email'=>'required|string|max:255|unique:usuarios',
             'password'=>'required|string|min:8|confirmed',
+            'terminos' => 'accepted',
+            'newsletter' => 'nullable|boolean',
+            ], [
+            'terminos.accepted' => 'Debes leer y aceptar los Términos y Condiciones para crear tu cuenta.'
         ]);
         $usuario= Usuario::create([
             'nombre'=>$request->nombre,
@@ -30,6 +34,8 @@ class RegistroController extends Controller
             'apellido_m'=>$request->apellido_m,
             'email'=>$request->email,
             'password'=> Hash::make($request->password),
+            'acepto_terminos' => true,
+            'suscrito_newsletter' => $request->has('newsletter'),
         ]);
         event(new Registered($usuario));
 

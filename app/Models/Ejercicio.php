@@ -16,6 +16,7 @@ class Ejercicio extends Model
     'gif_url',
     'descripcion',
     'grupo_muscular_id',
+    'video_youtube',
 
     ];
 

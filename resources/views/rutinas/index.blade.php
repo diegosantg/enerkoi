@@ -3,176 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis rutinas - Enerkoi</title>
+    <title>Mis Rutinas - Enerkoi</title>
     <link rel="icon" href="{{ asset('img/LOGOENERKOI.png') }}" type="image/png">
     
     <style>
-        /* 1. LAS VARIABLES DE TU SISTEMA DE DISEÑO */
+        /* 1. SISTEMA DE DISEÑO ENERKOI (Mobile-First) */
         :root {
-            --bg-oscuro : #3b4282;
-            --bg-claro: #f4f4f4;
+            --bg-app: #f4f6f9; 
+            --blanco: #ffffff;
             --azul-boton: #1877f2;
             --verde-exito: #28a745;
-            --texto-oscuro: #333;
-            --texto-claro: #fff;
+            --texto-oscuro: #1f2937;
+            --texto-gris: #6b7280;
         }
 
-        /* 2. REGLAS GLOBALES PARA PANTALLAS INTERNAS */
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--bg-oscuro);
-            color: var(--texto-claro);
-            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background-color: var(--bg-app); color: var(--texto-oscuro);
+            -webkit-font-smoothing: antialiased; 
         }
 
-        /* Contenedor central: Evita que la lista se estire demasiado en PC */
-        .main-container {
-            max-width: 800px;
-            margin: 0 auto;
+        .app-container {
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            padding-bottom: 80px;
         }
 
-        /* 3. BOTÓN DE NAVEGACIÓN (Volver) */
-        .btn-volver {
-            display: inline-block;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-size: 15px;
-            transition: color 0.3s;
+        /* 2. HEADER DE NAVEGACIÓN (Estilo App) */
+        .top-nav { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        
+        .btn-back { 
+            background: var(--blanco); border: none; width: 45px; height: 45px; 
+            border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex; justify-content: center; align-items: center; cursor: pointer; color: var(--texto-oscuro);
+            transition: transform 0.1s;
         }
+        .btn-back:active { transform: scale(0.95); }
+        
+        .top-nav h1 { margin: 0; font-size: 24px; font-weight: 800; color: var(--texto-oscuro); }
 
-        .btn-volver:hover {
-            color: var(--texto-claro);
-            text-decoration: underline;
-        }
-
-        /* 4. ENCABEZADO (Título + Botón) */
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .header-section h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
+        /* 3. BOTÓN PRINCIPAL (Crear Nueva Rutina) */
         .btn-crear {
-            background-color: var(--verde-exito);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            transition: transform 0.2s, background 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; background: var(--verde-exito); color: var(--blanco);
+            border: none; border-radius: 20px; padding: 18px; font-size: 16px; font-weight: 800;
+            text-decoration: none; box-shadow: 0 8px 20px rgba(40, 167, 69, 0.2);
+            margin-bottom: 30px; transition: transform 0.1s;
         }
+        .btn-crear:active { transform: scale(0.97); }
 
-        .btn-crear:hover {
-            background-color: #218838;
-            transform: translateY(-2px); /* Pequeño salto visual */
-        }
-
-        /* 5. LISTA Y TARJETAS DE RUTINAS */
+        /* 4. LISTA Y TARJETAS DE RUTINAS */
         .lista-rutinas {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espacio automático entre tarjetas */
+            display: flex; flex-direction: column; gap: 15px;
         }
 
-        /* Toda la tarjeta es un enlace <a> */
         .tarjeta-rutina {
-            background-color: var(--bg-claro);
-            padding: 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--texto-oscuro);
-            display: block;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: var(--blanco); border-radius: 24px; padding: 20px;
+            text-decoration: none; color: var(--texto-oscuro); display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s;
         }
+        .tarjeta-rutina:active { transform: scale(0.98); background: #f9fafb; }
 
-        .tarjeta-rutina:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-        }
-
-        .tarjeta-rutina h3 {
-            margin: 0 0 8px 0;
-            color: var(--bg-oscuro);
-            font-size: 20px;
-        }
-
-        .tarjeta-rutina p {
-            margin: 0 0 15px 0;
-            color: #666;
-            font-size: 15px;
-            line-height: 1.4;
-        }
-
-        /* Píldora de información */
+        .rutina-info { flex: 1; }
+        .rutina-info h3 { margin: 0 0 6px 0; font-size: 18px; font-weight: 800; color: var(--texto-oscuro); }
+        .rutina-info p { margin: 0 0 12px 0; color: var(--texto-gris); font-size: 14px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
         .badge-ejercicios {
-            background-color: #ddd;
-            color: #555;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
+            background: var(--bg-app); color: var(--texto-gris); padding: 6px 12px;
+            border-radius: 12px; font-size: 12px; font-weight: 700; 
+            display: inline-flex; align-items: center; gap: 6px;
         }
 
-        /* 6. ESTADO VACÍO (Empty State) */
+        .icon-arrow { color: #ccc; font-size: 24px; font-weight: bold; margin-left: 15px; }
+
+        /* 5. ESTADO VACÍO (Empty State) */
         .estado-vacio {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            padding: 40px;
-            text-align: center;
-            border-radius: 8px;
+            background: var(--blanco); border-radius: 24px; padding: 40px 20px;
+            text-align: center; color: var(--texto-gris); box-shadow: 0 6px 15px rgba(0,0,0,0.03);
         }
+        .estado-vacio h3 { margin: 0 0 5px 0; font-size: 18px; color: var(--texto-oscuro); }
+        .estado-vacio p { margin: 0; font-size: 14px; }
 
-        .estado-vacio p {
-            margin: 0;
-            font-size: 18px;
-            color: #ccc;
-        }
+        /* 6. SVGs GLOBALES */
+        .svg-icon { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .svg-small { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <a href="/dashboard" class="btn-volver">← Volver al dashboard</a>
-
-        <div class="header-section">
+    <div class="app-container">
+        
+        <nav class="top-nav">
+            <a href="/dashboard" class="btn-back">
+                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </a>
             <h1>Mis Rutinas</h1>
-            <a href="/rutinas/crear" class="btn-crear">+ Nueva Rutina</a>
-        </div>
+        </nav>
+
+        <a href="/rutinas/crear" class="btn-crear">
+            <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Diseñar Nueva Rutina
+        </a>
 
         @if($rutinas->isEmpty())
             <div class="estado-vacio">
-                <p>¡Oye! ¿Aún no has creado una rutina? Anímate 💪</p>
+                <svg style="width: 48px; height: 48px; stroke: #ccc; fill:none; stroke-width:1.5; margin-bottom: 15px;" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                <h3>Lista vacía</h3>
+                <p>¡Anímate a armar tu primera rutina de entrenamiento!</p>
             </div>
         @else
-            <ul class="lista-rutinas">
+            <div class="lista-rutinas">
                 @foreach($rutinas as $rutina)
-                <li>
-                    <a href="/rutinas/{{$rutina->id_rutinas}}" class="tarjeta-rutina">
+                <a href="/rutinas/{{$rutina->id_rutinas}}" class="tarjeta-rutina">
+                    <div class="rutina-info">
                         <h3>{{$rutina->nombre}}</h3>
-                        <p>{{$rutina->descripcion}}</p>
+                        @if($rutina->descripcion)
+                            <p>{{$rutina->descripcion}}</p>
+                        @endif
                         <span class="badge-ejercicios">
+                            <svg class="svg-small" viewBox="0 0 24 24"><path d="M18 10h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3"/><path d="M2 10h3v4H2a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/><path d="M5 8h3v8H5Z"/><path d="M16 8h3v8h-3Z"/><path d="M8 11h8v2H8Z"/></svg>
                             {{$rutina->ejercicios->count()}} ejercicios
                         </span>
-                    </a>
-                </li>
+                    </div>
+                    <div class="icon-arrow">›</div>
+                </a>
                 @endforeach
-            </ul>
+            </div>
         @endif
+        
     </div>
 </body>
 </html>
